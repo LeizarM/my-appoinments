@@ -20,3 +20,10 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+//Specialty
+
+Route::get('/specialties', 'SpecialtyController@index');
+Route::get('/specialties/create', 'SpecialtyController@create'); //form register
+Route::get('/specialties/{specialty}/edit', 'SpecialtyController@edit');
+Route::post('/specialties', 'SpecialtyController@store'); // send form
