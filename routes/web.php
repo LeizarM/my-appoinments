@@ -23,7 +23,13 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 
 //Specialty
 
-Route::get('/specialties', 'SpecialtyController@index');
+/*Route::get('/specialties', 'SpecialtyController@index');
 Route::get('/specialties/create', 'SpecialtyController@create'); //form register
 Route::get('/specialties/{specialty}/edit', 'SpecialtyController@edit');
-Route::post('/specialties', 'SpecialtyController@store'); // send form
+Route::post('/specialties', 'SpecialtyController@store'); // send form*/
+
+Route::get('/specialties', [App\Http\Controllers\SpecialtyController::class, 'index']);
+Route::get('/specialties/create', [App\Http\Controllers\SpecialtyController::class, 'create']); //form register
+Route::get('/specialties/{specialty}/edit', [App\Http\Controllers\SpecialtyController::class, 'edit']);
+Route::post('/specialties', [App\Http\Controllers\SpecialtyController::class, 'store']);
+
