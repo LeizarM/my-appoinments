@@ -13,7 +13,10 @@ class SpecialtyController extends Controller
     }
 
     public function index(){
-        return view('specialties.index');
+
+        $specialties = Specialty::all();
+
+        return view('specialties.index', compact('specialties'));
     }
 
 
@@ -22,17 +25,64 @@ class SpecialtyController extends Controller
     }
 
 
+    private function performValidation( Request $request ){
+
+        $rules = [
+            'name' => 'required|min:3',
+            'description' => 'required',
+        ];
+        $this->validate($request, $rules);
+    }
+
     public function store( Request $request ){
 
         //dd($request->all());
+        $this->performValidation( $request );
 
         $specialty = new Specialty();
         $specialty->name = $request->input('name');
         $specialty->description = $request->input('description');
-        $specialty->save();
+        $specialty->save(); //INSERT
 
-        return back();
+        $notification = 'The specialty was created successfully';
+
+        return redirect('/specialties')->with( compact('notification') );
 
 
+    }
+
+
+    public function edit( Specialty $specialty){
+
+
+
+
+        return view('specialties.edit', compact('specialty'));
+    }
+
+
+    public function update( Request $request, Specialty $specialty ){
+
+
+        $this->performValidation( $request );
+
+
+        $specialty->name = $request->input('name');
+        $specialty->description = $request->input('description');
+        $specialty->save(); //UPDATE
+
+        $notification = 'The specialty was updated successfully';
+
+        return redirect('/specialties')->with( compact('notification') );
+
+    }
+
+    public function destroy( Specialty $specialty ){
+
+        $deleteName = $specialty->name;
+
+        $specialty->delete();
+        $notification = 'The specialty '.  $deleteName  .' was deleted successfully';
+        return redirect('/specialties')->with( compact('notification') );
     }
 }
