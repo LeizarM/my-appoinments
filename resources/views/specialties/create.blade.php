@@ -32,7 +32,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="name">Description</label>
+                    <label for="description">Description</label>
                     <input type="text" class="form-control" name="description" id="description" placeholder="Description" value="{{ old('description') }}">
                 </div>
                 <button type="submit" class="btn btn-primary">Save</button>

@@ -9,7 +9,7 @@
               <h3 class="mb-0">Doctors</h3>
             </div>
             <div class="col text-right">
-              <a href="{{ url('specialties/create') }}" class="btn btn-sm btn-success">
+              <a href="{{ url('doctors/create') }}" class="btn btn-sm btn-success">
                 New Doctor
               </a>
             </div>
@@ -31,27 +31,31 @@
             <thead class="thead-light">
               <tr>
                 <th scope="col">Name</th>
-                <th scope="col">Description</th>
+                <th scope="col">E-mail</th>
+                <th scope="col">DNI</th>
                 <th scope="col">Actions</th>
 
               </tr>
             </thead>
             <tbody>
-            @foreach ( $specialties as $specialty )
+            @foreach ( $doctors as $doctor )
 
               <tr>
                 <th scope="row">
-                  {{ $specialty->name }}
+                  {{ $doctor->name }}
                 </th>
                 <td>
-                  {{ $specialty->description }}
+                  {{ $doctor->email }}
                 </td>
                 <td>
+                    {{ $doctor->dni }}
+                  </td>
+                <td>
 
-                  <form action="{{ url( '/specialties/'.$specialty->id ) }}" method="POST">
+                  <form action="{{ url( '/doctors/'.$doctor->id ) }}" method="POST">
                     @csrf
                     @method('DELETE')
-                    <a href="{{ url('specialties/'.$specialty->id.'/edit') }}" class="btn btn-primary btn-sm">Edit</a>
+                    <a href="{{ url('doctors/'.$doctor->id.'/edit') }}" class="btn btn-primary btn-sm">Edit</a>
                     <button type="submit" class="btn btn-danger btn-sm">Delete</button>
                   </form>
                 </td>

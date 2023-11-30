@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+use App\Http\Controllers\DoctorController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -37,7 +37,6 @@ Route::put('/specialties/{specialty}', [App\Http\Controllers\SpecialtyController
 Route::delete('/specialties/{specialty}', [App\Http\Controllers\SpecialtyController::class, 'destroy']);
 
 //Doctors
-Route::resource('doctors', 'DoctorController');
-
+Route::resource('doctors', DoctorController::class);
 
 
