@@ -49,7 +49,7 @@
                 </td>
                 <td>
                     {{ $doctor->dni }}
-                  </td>
+                </td>
                 <td>
 
                   <form action="{{ url( '/doctors/'.$doctor->id ) }}" method="POST">

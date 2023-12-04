@@ -79,7 +79,7 @@ class SpecialtyController extends Controller
 
     public function destroy( Specialty $specialty ){
 
-        $deleteName = $specialty->name;
+        $deleteName  = $specialty->name;
 
         $specialty->delete();
         $notification = 'The specialty '.  $deleteName  .' was deleted successfully';
