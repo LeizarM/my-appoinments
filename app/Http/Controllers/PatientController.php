@@ -2,18 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
 use Illuminate\Http\Request;
-
-class DoctorController extends Controller
+use App\Models\User;
+class PatientController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $doctors = User::doctors()->get();
-        return view( 'doctors.index', compact('doctors') );
+        $patients = User::patients()->get();
+        return view( 'patients.index', compact('patients') );
     }
 
     /**
@@ -21,7 +20,7 @@ class DoctorController extends Controller
      */
     public function create()
     {
-        return view('doctors.create');
+        return view('patients.create');
     }
 
     /**
