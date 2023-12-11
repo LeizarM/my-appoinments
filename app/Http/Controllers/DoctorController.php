@@ -27,9 +27,29 @@ class DoctorController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
-    {
-        //
+    public function store( Request $request ){
+
+        $rules = [
+            'name' => 'required',
+            'email' => 'required|email',
+            'dni' => 'nullable',
+            'address' => 'min:5',
+            'phone' => 'min:6',
+        ];
+
+
+        $this->validate( $request, $rules  );
+
+        User::create(
+
+            $request->only( 'name', 'email', 'dni', 'address', 'phone') + [
+                'role' => 'doctor',
+                'password' => bcrypt( $request->input('password') ),
+            ]
+
+        );
+
+        return redirect()->route('doctors.index')->with( 'notification', 'The doctor was created successfully' );
     }
 
     /**
@@ -45,7 +65,9 @@ class DoctorController extends Controller
      */
     public function edit(string $id)
     {
-        //
+
+        $doctor = User::doctors()->findOrFail( $id );
+        return view('doctors.edit', compact('doctor'));
     }
 
     /**
@@ -53,14 +75,42 @@ class DoctorController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $rules = [
+            'name' => 'required',
+            'email' => 'required|email',
+            'dni' => 'nullable',
+            'address' => 'min:5',
+            'phone' => 'min:6',
+        ];
+
+
+        $this->validate( $request, $rules  );
+
+        $doctor = User::doctors()->findOrFail( $id );
+
+        $data = $request->only( 'name', 'email', 'dni', 'address', 'phone');
+
+        $password = $request->input('password');
+
+        if( $password ){
+
+            $data['password'] = bcrypt( $password );
+        }
+
+
+        $doctor->fill( $data );
+        $doctor->save();
+
+        return redirect()->route('doctors.index')->with( 'notification', 'The doctor was updated successfully' );
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy( User $doctor )
     {
-        //
+        $doctor->delete();
+
+        return redirect()->route('doctors.index')->with( 'notification', 'The doctor was deleted successfully' );
     }
 }

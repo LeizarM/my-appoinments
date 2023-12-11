@@ -50,6 +50,11 @@
                     <input type="text" class="form-control" name="phone" id="phone" placeholder="phone" value="{{ old('phone') }}">
                 </div>
 
+                <div class="form-group">
+                    <label for="dni">Password</label>
+                    <input type="text" class="form-control" name="password" id="password" placeholder="Password" value="{{ old('password', Str::random(8) ) }}">
+                </div>
+
                 <button type="submit" class="btn btn-primary">Save</button>
             </form>
 

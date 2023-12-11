@@ -11,7 +11,7 @@ class PatientController extends Controller
      */
     public function index()
     {
-        $patients = User::patients()->get();
+        $patients = User::patients()->paginate(5);
         return view( 'patients.index', compact('patients') );
     }
 
@@ -28,7 +28,27 @@ class PatientController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+        $rules = [
+            'name' => 'required',
+            'email' => 'required|email',
+            'dni' => 'nullable',
+            'address' => 'min:5',
+            'phone' => 'min:6',
+        ];
+
+
+        $this->validate( $request, $rules  );
+
+        User::create(
+
+            $request->only( 'name', 'email', 'dni', 'address', 'phone') + [
+                'role' => 'patient',
+                'password' => bcrypt( $request->input('password') ),
+            ]
+        );
+
+        return redirect()->route('patients.index')->with( 'notification', 'The patient was created successfully' );
     }
 
     /**
@@ -42,9 +62,11 @@ class PatientController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(User $patient)
     {
-        //
+
+
+        return view('patients.edit', compact('patient'));
     }
 
     /**
@@ -52,14 +74,38 @@ class PatientController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+
+        $rules = [
+            'name' => 'required',
+            'email' => 'required|email',
+            'dni' => 'nullable',
+            'address' => 'min:5',
+            'phone' => 'min:6',
+        ];
+
+        $this->validate( $request, $rules );
+
+        $patient = User::patients()->findOrFail( $id );
+
+        $data = $request->only( 'name', 'email', 'dni', 'address', 'phone');
+        $password = $request->input('password');
+        if( $password ){
+
+            $data['password'] = bcrypt( $password );
+        }
+        $patient->fill( $data );
+        $patient->save();
+
+        return redirect()->route('patients.index')->with( 'notification', 'The patient was updated successfully' );
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy( User $patient )
     {
-        //
+        $patient->delete();
+
+        return redirect()->route('patients.index')->with( 'notification', 'The patient was deleted successfully' );
     }
 }
