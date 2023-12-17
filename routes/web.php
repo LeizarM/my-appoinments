@@ -1,8 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\DoctorController;
-use App\Http\Controllers\PatientController;
+use App\Http\Controllers\Admin\DoctorController;
+use App\Http\Controllers\Admin\PatientController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -22,27 +22,27 @@ Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-//Specialty
 
-/*Route::get('/specialties', 'SpecialtyController@index');
-Route::get('/specialties/create', 'SpecialtyController@create'); //form register
-Route::get('/specialties/{specialty}/edit', 'SpecialtyController@edit');
-Route::post('/specialties', 'SpecialtyController@store'); // send form*/
+Route::middleware(['auth', 'admin'])->group(function () {
 
-Route::get('/specialties', [App\Http\Controllers\SpecialtyController::class, 'index']);
-Route::get('/specialties/create', [App\Http\Controllers\SpecialtyController::class, 'create']); //form register
-Route::get('/specialties/{specialty}/edit', [App\Http\Controllers\SpecialtyController::class, 'edit']);
+    //Specialty
 
-Route::post('/specialties', [App\Http\Controllers\SpecialtyController::class, 'store']);
-Route::put('/specialties/{specialty}', [App\Http\Controllers\SpecialtyController::class, 'update']);
-Route::delete('/specialties/{specialty}', [App\Http\Controllers\SpecialtyController::class, 'destroy']);
+    /*Route::get('/specialties', 'SpecialtyController@index');
+    Route::get('/specialties/create', 'SpecialtyController@create'); //form register
+    Route::get('/specialties/{specialty}/edit', 'SpecialtyController@edit');
+    Route::post('/specialties', 'SpecialtyController@store'); // send form*/
 
-//Doctors
-Route::resource('doctors', DoctorController::class);
+    Route::get('/specialties', [App\Http\Controllers\Admin\SpecialtyController::class, 'index']);
+    Route::get('/specialties/create', [App\Http\Controllers\Admin\SpecialtyController::class, 'create']); //form register
+    Route::get('/specialties/{specialty}/edit', [App\Http\Controllers\Admin\SpecialtyController::class, 'edit']);
 
-//Patients
-Route::resource('patients', PatientController::class);
+    Route::post('/specialties', [App\Http\Controllers\Admin\SpecialtyController::class, 'store']);
+    Route::put('/specialties/{specialty}', [App\Http\Controllers\Admin\SpecialtyController::class, 'update']);
+    Route::delete('/specialties/{specialty}', [App\Http\Controllers\Admin\SpecialtyController::class, 'destroy']);
 
+    //Doctors
+    Route::resource('doctors', DoctorController::class);
 
-
-
+    //Patients
+    Route::resource('patients', PatientController::class);
+});

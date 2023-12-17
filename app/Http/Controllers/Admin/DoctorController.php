@@ -1,18 +1,19 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
-use Illuminate\Http\Request;
 use App\Models\User;
-class PatientController extends Controller
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+class DoctorController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $patients = User::patients()->paginate(5);
-        return view( 'patients.index', compact('patients') );
+        $doctors = User::doctors()->get();
+        return view( 'doctors.index', compact('doctors') );
     }
 
     /**
@@ -20,14 +21,13 @@ class PatientController extends Controller
      */
     public function create()
     {
-        return view('patients.create');
+        return view('doctors.create');
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
-    {
+    public function store( Request $request ){
 
         $rules = [
             'name' => 'required',
@@ -43,12 +43,13 @@ class PatientController extends Controller
         User::create(
 
             $request->only( 'name', 'email', 'dni', 'address', 'phone') + [
-                'role' => 'patient',
+                'role' => 'doctor',
                 'password' => bcrypt( $request->input('password') ),
             ]
+
         );
 
-        return redirect()->route('patients.index')->with( 'notification', 'The patient was created successfully' );
+        return redirect()->route('doctors.index')->with( 'notification', 'The doctor was created successfully' );
     }
 
     /**
@@ -62,11 +63,11 @@ class PatientController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(User $patient)
+    public function edit(string $id)
     {
 
-
-        return view('patients.edit', compact('patient'));
+        $doctor = User::doctors()->findOrFail( $id );
+        return view('doctors.edit', compact('doctor'));
     }
 
     /**
@@ -74,7 +75,6 @@ class PatientController extends Controller
      */
     public function update(Request $request, string $id)
     {
-
         $rules = [
             'name' => 'required',
             'email' => 'required|email',
@@ -83,29 +83,34 @@ class PatientController extends Controller
             'phone' => 'min:6',
         ];
 
-        $this->validate( $request, $rules );
 
-        $patient = User::patients()->findOrFail( $id );
+        $this->validate( $request, $rules  );
+
+        $doctor = User::doctors()->findOrFail( $id );
 
         $data = $request->only( 'name', 'email', 'dni', 'address', 'phone');
+
         $password = $request->input('password');
+
         if( $password ){
 
             $data['password'] = bcrypt( $password );
         }
-        $patient->fill( $data );
-        $patient->save();
 
-        return redirect()->route('patients.index')->with( 'notification', 'The patient was updated successfully' );
+
+        $doctor->fill( $data );
+        $doctor->save();
+
+        return redirect()->route('doctors.index')->with( 'notification', 'The doctor was updated successfully' );
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy( User $patient )
+    public function destroy( User $doctor )
     {
-        $patient->delete();
+        $doctor->delete();
 
-        return redirect()->route('patients.index')->with( 'notification', 'The patient was deleted successfully' );
+        return redirect()->route('doctors.index')->with( 'notification', 'The doctor was deleted successfully' );
     }
 }
